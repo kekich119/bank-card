@@ -6,20 +6,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
-import java.util.Currency;
 @Data
 @Entity
-public class Card {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long cardNumber;
+    private String name;
 
-    private String owner;
-
-    private String status;
-
-    private int balance;
+    private String password;
 }
