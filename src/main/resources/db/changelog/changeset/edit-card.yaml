@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: edit_max_value
+      author: kekich
+      changes:
+        - modifyDataType:
+            tableName: card
+            columnName: card_number
+            newDataType: varchar(16)

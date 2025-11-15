@@ -3,3 +3,9 @@ databaseChangeLog:
       file: db/changelog/changeset/create-card.yaml
   - include:
       file: db/changelog/changeset/crate-user.yaml
+  - include:
+      file: db/changelog/changeset/edit-card.yaml
+#  - include:
+#      file: db/changelog/changeset/edit-user.yaml
+  - include:
+      file: db/changelog/changeset/create-role.yaml

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-columns1
+      author: kekich
+      changes:
+        - addColumn:
+            tableName: user
+            columns:
+              - column:
+                  name: email
+                  type: varchar
+                  constraints:
+                    nullable: false
