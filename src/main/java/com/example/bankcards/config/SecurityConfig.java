@@ -48,7 +48,6 @@ public class SecurityConfig {
     }
 
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -62,6 +61,8 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/secured/user").authenticated()
+                                .requestMatchers("/swagger/**").permitAll()
+                                .anyRequest().permitAll()
 
                 )
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);

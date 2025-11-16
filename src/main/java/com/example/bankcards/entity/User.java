@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
 
@@ -15,7 +15,8 @@ public class User {
 
     private String name;
 
-    private String role;
+    @Column(name = "role_id")
+    private int roleId;
 
     private String email;
 

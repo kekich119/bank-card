@@ -36,5 +36,9 @@ public class UserService implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
 
 }
