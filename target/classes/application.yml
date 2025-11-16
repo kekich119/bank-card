@@ -19,6 +19,9 @@
 #    hibernate:
 #      ddl-auto:
 spring:
+
+  config:
+    import: mail-secret.properties
   liquibase:
     enabled: true
   datasource:
@@ -30,11 +33,29 @@ spring:
       ddl-auto: none
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+  mail:
+      host: smtp.gmail.com
+      port: 587
+      username: lololix468@gmail.com
+      password: ${MAIL_PASS}
+      protocol: smtp
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+
+
 
 bank_rest-main:
   app:
     secret: 2d5c19105c36aa0523beaefe1387b0d586a59bbff3d3436791221071ab6e6dbe
     expirationMs: 7200000
+
+
+
+
 
 
 server:

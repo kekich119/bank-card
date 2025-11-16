@@ -62,6 +62,7 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/secured/user").authenticated()
                                 .requestMatchers("/swagger/**").permitAll()
+                                .requestMatchers("/api/**").permitAll()
                                 .anyRequest().permitAll()
 
                 )
