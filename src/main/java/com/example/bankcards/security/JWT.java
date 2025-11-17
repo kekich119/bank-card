@@ -21,7 +21,7 @@ public class JWT {
     private String secret;
 
     @Value("${bank_rest-main.app.expirationMs}")
-    private String lifeTime;
+    private int lifeTime;
 
 
     private Key getSigningKey() {

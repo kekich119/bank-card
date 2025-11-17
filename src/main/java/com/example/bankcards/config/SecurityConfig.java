@@ -61,9 +61,12 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/secured/user").authenticated()
-                                .requestMatchers("/swagger/**").permitAll()
-                                .requestMatchers("/api/**").permitAll()
-                                .anyRequest().permitAll()
+                                .requestMatchers(
+                                        "/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html"
+                                ).permitAll()
+                                .anyRequest().authenticated()
 
                 )
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
