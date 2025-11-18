@@ -78,7 +78,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOriginPattern("http://localhost:3000"); // <- здесь важно
+        configuration.addAllowedOriginPattern("http://localhost:3000");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
 

@@ -3,6 +3,7 @@ package com.example.bankcards.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +42,7 @@ public class JWT {
     }
 
 
+
     public String getEmailFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(getSigningKey())
@@ -48,6 +50,29 @@ public class JWT {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public String getNameFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    public String getToken(HttpServletRequest request) {
+        String token = null;
+
+        if (request.getCookies() != null) {
+            for (var cookie : request.getCookies()) {
+                if (cookie.getName().equals("JWT")) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        return token;
     }
 
 

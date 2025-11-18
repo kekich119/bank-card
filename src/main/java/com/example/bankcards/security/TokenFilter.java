@@ -38,9 +38,11 @@ public class TokenFilter extends OncePerRequestFilter {
         String token = null;
         String username = null;
 
+
+
         if (request.getCookies() != null) {
             for (var cookie : request.getCookies()) {
-                if (cookie.getName().equals("jwt")) {
+                if (cookie.getName().equals("JWT")) {
                     token = cookie.getValue();
                     break;
                 }
@@ -48,7 +50,7 @@ public class TokenFilter extends OncePerRequestFilter {
         }
         if (token != null) {
             try{
-                username = jwtCore.getEmailFromToken(token);
+                username = jwtCore.getNameFromToken(token);
 
             }catch (ExpiredJwtException e){
                 System.out.println("JWT token expired");

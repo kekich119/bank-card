@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: edit_param-column
+      author: kekich
+      changes:
+        - addUniqueConstraint:
+            tableName: card
+            columnNames: card_number
+            constraintName: card_num

@@ -11,6 +11,8 @@ import java.util.Currency;
 @Table(name = "card")
 public class Card {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,4 +24,13 @@ public class Card {
     private String status;
 
     private int balance;
+
+    public Card(String cardNumber, String owner, String status, int balance) {
+        this.cardNumber = cardNumber;
+        this.owner = owner;
+        this.status = status;
+        this.balance = balance;
+
+
+    }
 }

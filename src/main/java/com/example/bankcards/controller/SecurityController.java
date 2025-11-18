@@ -72,7 +72,7 @@ public class SecurityController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtcore.generateToken(authentication);
         Cookie cookie = new Cookie("JWT", jwt);
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(false);
         cookie.setSecure(false);
         cookie.setPath("/");
         cookie.setMaxAge(jwtcore.getLifeTime());
