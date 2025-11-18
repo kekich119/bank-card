@@ -18,13 +18,15 @@ public class UserDetailsImpl implements UserDetails {
     private String name;
     private String email;
     private String password;
+    private int roleId;
 
     public static UserDetailsImpl build(User user) {
         return new UserDetailsImpl(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getPassword()
+                user.getPassword(),
+                user.getRoleId()
         );
     }
 

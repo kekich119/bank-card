@@ -1,5 +1,6 @@
 package com.example.bankcards.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -33,7 +34,9 @@ public class JWT {
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal(); //get info from auth user
         return Jwts.builder()
                 .subject(userDetails.getUsername())
-                .id(String.valueOf(userDetails.getId())) //id user
+                .id(String.valueOf(userDetails.getId()))
+                .claim("roleId", userDetails.getRoleId())
+                .claim("email", userDetails.getEmail())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + lifeTime))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -44,12 +47,13 @@ public class JWT {
 
 
     public String getEmailFromToken(String token) {
-        return Jwts.parser()
+
+        Claims claims = Jwts.parser()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .getBody();
+        return claims.get("email", String.class);
     }
 
     public String getNameFromToken(String token) {
@@ -74,6 +78,7 @@ public class JWT {
         }
         return token;
     }
+
 
 
 

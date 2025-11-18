@@ -5,6 +5,7 @@ import com.example.bankcards.entity.Card;
 import com.example.bankcards.repository.CardRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -21,6 +22,10 @@ public class CardService {
         return cardRepository.save(card);
     }
 
+
+    public List<Card> findAll() {
+        return cardRepository.findAll();
+    }
 
     public String createNumberCard() {
         StringBuilder sb = new StringBuilder();
