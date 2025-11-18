@@ -3,12 +3,16 @@ package com.example.bankcards.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Currency;
 @Data
 @Entity
 @Table(name = "card")
+@NoArgsConstructor
 public class Card {
 
 
@@ -25,12 +29,17 @@ public class Card {
 
     private int balance;
 
-    public Card(String cardNumber, String owner, String status, int balance) {
+    private LocalDate dateAdd;
+
+    public Card(String cardNumber, String owner, String status, int balance, LocalDate dateAdd) {
         this.cardNumber = cardNumber;
         this.owner = owner;
         this.status = status;
         this.balance = balance;
+        this.dateAdd = dateAdd;
 
 
     }
+
+
 }

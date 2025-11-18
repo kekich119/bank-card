@@ -12,6 +12,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/api/card")
 public class CardController {
@@ -31,7 +33,8 @@ public class CardController {
 
         String token = jwtcore.getToken(request);
         String owner = jwtcore.getNameFromToken(token);
-        Card card = new Card("1234567888888888", owner, "ACTIVE",0);
+        String cardNumber = cardService.createNumberCard();
+        Card card = new Card(cardNumber, owner, "ACTIVE",0, LocalDate.now());
 
 
         cardService.save(card);

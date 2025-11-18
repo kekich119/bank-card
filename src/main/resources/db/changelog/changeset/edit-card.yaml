@@ -7,3 +7,16 @@ databaseChangeLog:
             tableName: card
             columnName: card_number
             newDataType: varchar(16)
+  - changeSet:
+      id: create-new-column
+      author: kekich
+      changes:
+        - addColumn:
+            tableName: card
+            columns:
+              - column:
+                  name: date_add
+                  type: date
+
+
+
