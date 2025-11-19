@@ -25,7 +25,7 @@ public class CardController {
 
     private final CardService cardService;
     @Autowired
-    private JavaMailSender mailSender;
+    private JavaMailSender mailSender; // for next time and upgrade proj
     private final JWT jwtcore;
     private final UserService userService;
 

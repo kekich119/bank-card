@@ -16,9 +16,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
+    User findUserByEmail(String email);
+
     Optional<User> findByEmail(String email);
 
     @Query("SELECT new com.example.bankcards.dto.UserViewDto(u.id, u.email, u.name, u.roleId) FROM User u")
     List<UserViewDto> findAllUsersWithoutPassword();
+
 
 }

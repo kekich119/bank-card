@@ -3,6 +3,8 @@ package com.example.bankcards.service;
 
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.repository.CardRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +49,27 @@ public class CardService {
 
         int increment = (last4Number + 1) % 10000;
 
-        return String.format("%04d", increment); // ключевой момент!
+        return String.format("%04d", increment);
+    }
+
+    public ResponseEntity<String> sendMoney(String numberCardFrom, String numberCardTo, int amount) {
+        Card cardFrom = cardRepository.findByCardNumber(numberCardFrom);
+        Card cardTo = cardRepository.findByCardNumber(numberCardTo);
+        if (cardFrom.getBalance() > amount) {
+            cardTo.setBalance(cardTo.getBalance() + amount);
+            cardFrom.setBalance(cardFrom.getBalance() - amount);
+            cardRepository.save(cardFrom);
+            cardRepository.save(cardTo);
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("fail, you don't have enough money for translation", HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    public String getOwnerByCardNumber(String cardNumber) {
+        Card card = cardRepository.findCardByCardNumber(cardNumber);
+        return card.getOwner();
     }
 
 

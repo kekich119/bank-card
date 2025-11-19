@@ -2,10 +2,13 @@ package com.example.bankcards.service;
 
 
 import com.example.bankcards.dto.UserViewDto;
+import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
+import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.security.UserDetailsImpl;
 import com.example.bankcards.util.RoleType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,9 +21,11 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final CardRepository cardRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, CardRepository cardRepository) {
         this.userRepository = userRepository;
+        this.cardRepository = cardRepository;
     }
 
     public User addUser(User user) {
@@ -31,11 +36,14 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
+    public User findByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user =  userRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        User user = userRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException(username));
         return UserDetailsImpl.build(user);
     }
 
@@ -48,7 +56,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-
     public RoleType getRoleByEmail(String email) {
 
         if (userRepository.existsByEmail(email)) {
@@ -57,13 +64,18 @@ public class UserService implements UserDetailsService {
             int roleId = user.getRoleId();
 
             return RoleType.fromCode(roleId);
-        }else {
+        } else {
             return null;
         }
-
-
-
     }
+
+
+    public List<Card> getUserCardsByEmail(String email) {
+       User user =  userRepository.findUserByEmail(email);
+       return cardRepository.findCardsByOwner(user.getName());
+    }
+
+
 
 
 }
