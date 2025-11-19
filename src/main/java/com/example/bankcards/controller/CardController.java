@@ -6,6 +6,7 @@ import com.example.bankcards.security.JWT;
 import com.example.bankcards.service.CardService;
 import com.example.bankcards.service.UserService;
 import com.example.bankcards.util.RoleType;
+import com.example.bankcards.util.SchedulerCard;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class CardController {
         return new ResponseEntity<>(card, HttpStatus.CREATED);
     }
 
+
     // на будущее для подтверждения почты пользователя
 //    @GetMapping
 //    public void sendEmail() {
@@ -61,6 +63,10 @@ public class CardController {
 //
 //
 //    }
+
+
+
+
 
 
 
