@@ -40,7 +40,7 @@ public class CardController {
         String token = jwtcore.getToken(request);
         String owner = jwtcore.getNameFromToken(token);
         String cardNumber = cardService.createNumberCard();
-        Card card = new Card(cardNumber, owner, "ACTIVE",0, LocalDate.now());
+        Card card = new Card(cardNumber, owner, "ACTIVE",0, LocalDate.now(), LocalDate.now().plusYears(2) );
 
 
         cardService.save(card);

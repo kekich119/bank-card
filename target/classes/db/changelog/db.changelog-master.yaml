@@ -11,3 +11,5 @@ databaseChangeLog:
       file: db/changelog/changeset/create-role.yaml
   - include:
       file: db/changelog/changeset/edit-card-table.yaml
+  - include:
+      file: db/changelog/changeset/create-expiration.yaml

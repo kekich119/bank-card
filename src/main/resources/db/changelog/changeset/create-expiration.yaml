@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-expiration
+      author: kekich
+      changes:
+        - addColumn:
+            tableName: card
+            columns:
+              - column:
+                  name: expiration
+                  type: date

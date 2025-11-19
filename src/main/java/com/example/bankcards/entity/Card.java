@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Currency;
 @Data
 @Entity
 @Table(name = "card")
@@ -31,12 +30,16 @@ public class Card {
 
     private LocalDate dateAdd;
 
-    public Card(String cardNumber, String owner, String status, int balance, LocalDate dateAdd) {
+    @Column(name = "expiration")
+    private LocalDate dateExpire;
+
+    public Card(String cardNumber, String owner, String status, int balance, LocalDate dateAdd, LocalDate dateExpire) {
         this.cardNumber = cardNumber;
         this.owner = owner;
         this.status = status;
         this.balance = balance;
         this.dateAdd = dateAdd;
+        this.dateExpire = dateExpire;
 
 
     }
