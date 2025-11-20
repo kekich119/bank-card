@@ -28,7 +28,7 @@ public class UserController {
         this.cardService = cardService;
     }
 
-    @GetMapping("/get/cards")
+    @GetMapping("/get/cards/hide")
     public List<CardResponseDto> getUserCards(HttpServletRequest request) {
         String token = jwtcore.getToken(request);
         String email = jwtcore.getEmailFromToken(token);
@@ -47,10 +47,16 @@ public class UserController {
 
                 ))
                 .toList();
-
-
-
     }
+
+    @GetMapping("/get/cards/full")
+    public List<Card> getUserCardFull(HttpServletRequest request) {
+        String token = jwtcore.getToken(request);
+        String email = jwtcore.getEmailFromToken(token);
+        List<Card> cards = userService.getUserCardsByEmail(email);
+        return cards;
+    }
+
 
     @PostMapping("/send-money")
     public ResponseEntity<String> sendMoney(HttpServletRequest request, @RequestBody SendMoneyDto sendMoneyDto) {
