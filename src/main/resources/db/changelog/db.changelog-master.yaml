@@ -1,7 +1,15 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/changeset/create-full-new-card.yaml
+      file: db/changelog/changeset/create-card.yaml
   - include:
-      file: db/changelog/changeset/create-full-new-roles.yaml
+      file: db/changelog/changeset/crate-user.yaml
   - include:
-      file: db/changelog/changeset/create-full-new-users.yaml
+      file: db/changelog/changeset/edit-card.yaml
+  - include:
+      file: db/changelog/changeset/edit-user.yaml
+  - include:
+      file: db/changelog/changeset/create-role.yaml
+  - include:
+      file: db/changelog/changeset/edit-card-table.yaml
+  - include:
+      file: db/changelog/changeset/create-expiration.yaml

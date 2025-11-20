@@ -39,7 +39,7 @@ databaseChangeLog:
       author: kekich
       changes:
         - addForeignKeyConstraint:
-            baseTableName: user
+            baseTableName: users
             baseColumnNames: role_id
             referencedTableName: roles
             referencedColumnNames: id
