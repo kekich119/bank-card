@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -33,20 +34,28 @@ public class UserController {
         String token = jwtcore.getToken(request);
         String email = jwtcore.getEmailFromToken(token);
 
+
+
         List<Card> cards = userService.getUserCardsByEmail(email);
 
-        return cards.stream()
-                .map(card -> new CardResponseDto(
-                        card.getId(),
-                        cardService.maskCardNumber(card.getCardNumber()),
-                        card.getOwner(),
-                        card.getStatus(),
-                        card.getBalance(),
-                        card.getDateAdd(),
-                        card.getDateExpire()
+        if (cards.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "You haven't cards");
+        }else {
+            return cards.stream()
+                    .map(card -> new CardResponseDto(
+                            card.getId(),
+                            cardService.maskCardNumber(card.getCardNumber()),
+                            card.getOwner(),
+                            card.getStatus(),
+                            card.getBalance(),
+                            card.getDateAdd(),
+                            card.getDateExpire()
 
-                ))
-                .toList();
+                    ))
+                    .toList();
+        }
+
+
     }
 
     @GetMapping("/get/cards/full")

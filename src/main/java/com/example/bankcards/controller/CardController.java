@@ -37,15 +37,22 @@ public class CardController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createCard(HttpServletRequest request) {
-
         String token = jwtcore.getToken(request);
         String owner = jwtcore.getNameFromToken(token);
         String cardNumber = cardService.createNumberCard();
-        Card card = new Card(cardNumber, owner, "ACTIVE",0, LocalDate.now(), LocalDate.now().plusYears(2) );
+        try{
+            Card card = new Card(cardNumber, owner, "ACTIVE",0, LocalDate.now(), LocalDate.now().plusYears(2) );
+            cardService.save(card);
+            return new ResponseEntity<>("your card has created", HttpStatus.CREATED);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
 
 
-        cardService.save(card);
-        return new ResponseEntity<>("your card has created", HttpStatus.CREATED);
+
     }
 
 

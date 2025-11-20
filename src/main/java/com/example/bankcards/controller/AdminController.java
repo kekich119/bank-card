@@ -64,14 +64,12 @@ public class AdminController {
         String email = jwtcore.getEmailFromToken(token);
         RoleType role = userService.getRoleByEmail(email);
         if (role == RoleType.ADMIN) {
-            ResponseEntity<?> response =  cardService.deleteCardByCardNumber(deleteCardDto.getCardNumber());
+            ResponseEntity<?> response = cardService.deleteCardByCardNumber(deleteCardDto.getCardNumber());
             return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
-        }
-        else {
+        } else {
             return new ResponseEntity<>("You don't have a license", HttpStatus.FORBIDDEN);
         }
     }
-
 
 
 }

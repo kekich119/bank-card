@@ -8,6 +8,7 @@ import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.security.UserDetailsImpl;
 import com.example.bankcards.util.RoleType;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Primary
 
 public class UserService implements UserDetailsService {
 
@@ -71,11 +73,9 @@ public class UserService implements UserDetailsService {
 
 
     public List<Card> getUserCardsByEmail(String email) {
-       User user =  userRepository.findUserByEmail(email);
-       return cardRepository.findCardsByOwner(user.getName());
+        User user = userRepository.findUserByEmail(email);
+        return cardRepository.findCardsByOwner(user.getName());
     }
-
-
 
 
 }

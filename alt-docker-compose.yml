@@ -1,0 +1,14 @@
+services:
+  bank_rest:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: bank_db
+      POSTGRES_USER: kekich
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - "5432:5432"
+    volumes:
+      - bank_rest_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  bank_rest_postgres_data:

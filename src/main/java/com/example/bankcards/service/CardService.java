@@ -61,10 +61,9 @@ public class CardService {
             cardRepository.save(cardFrom);
             cardRepository.save(cardTo);
             return new ResponseEntity<>("success", HttpStatus.OK);
-        }else {
+        } else {
             return new ResponseEntity<>("fail, you don't have enough money for translation", HttpStatus.BAD_REQUEST);
         }
-
     }
 
     public String getOwnerByCardNumber(String cardNumber) {
@@ -73,13 +72,16 @@ public class CardService {
     }
 
     public ResponseEntity<?> deleteCardByCardNumber(String cardNumber) {
-        cardRepository.deleteCardByCardNumber( cardNumber );
-        return new ResponseEntity<>("success delete", HttpStatus.OK);
+        if (cardRepository.findByCardNumber(cardNumber) != null) {
+            cardRepository.deleteCardByCardNumber(cardNumber);
+            return new ResponseEntity<>("success delete", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Incorrect card number", HttpStatus.NOT_FOUND);
+        }
     }
 
     public String maskCardNumber(String cardNumber) {
         if (cardNumber == null || cardNumber.length() < 4) return cardNumber;
-
         return "**** **** **** " + cardNumber.substring(cardNumber.length() - 4);
     }
 
