@@ -1,5 +1,6 @@
 package com.example.bankcards.controller;
 
+import com.example.bankcards.dto.CardResponseDto;
 import com.example.bankcards.dto.SendMoneyDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
@@ -28,10 +29,27 @@ public class UserController {
     }
 
     @GetMapping("/get/cards")
-    public List<Card> getUserCards(HttpServletRequest request) {
+    public List<CardResponseDto> getUserCards(HttpServletRequest request) {
         String token = jwtcore.getToken(request);
         String email = jwtcore.getEmailFromToken(token);
-        return userService.getUserCardsByEmail(email);
+
+        List<Card> cards = userService.getUserCardsByEmail(email);
+
+        return cards.stream()
+                .map(card -> new CardResponseDto(
+                        card.getId(),
+                        cardService.maskCardNumber(card.getCardNumber()),
+                        card.getOwner(),
+                        card.getStatus(),
+                        card.getBalance(),
+                        card.getDateAdd(),
+                        card.getDateExpire()
+
+                ))
+                .toList();
+
+
+
     }
 
     @PostMapping("/send-money")
@@ -42,11 +60,11 @@ public class UserController {
         String name = user.getName();
         String owner = cardService.getOwnerByCardNumber(sendMoneyDto.getCardNumberFrom());
         if (name.equals(owner)) {
-             ResponseEntity answer = (cardService.sendMoney(sendMoneyDto.getCardNumberFrom(), sendMoneyDto.getCardNumberTo(), sendMoneyDto.getAmount()));
+            ResponseEntity answer = (cardService.sendMoney(sendMoneyDto.getCardNumberFrom(), sendMoneyDto.getCardNumberTo(), sendMoneyDto.getAmount()));
 
 
             return ResponseEntity.status(answer.getStatusCode()).body(answer.getBody().toString());
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You not the owner of the card");
         }
 
