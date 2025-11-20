@@ -1,5 +1,6 @@
 package com.example.bankcards.controller;
 
+import com.example.bankcards.dto.DeleteCardDto;
 import com.example.bankcards.dto.UserViewDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.security.JWT;
@@ -7,9 +8,9 @@ import com.example.bankcards.service.CardService;
 import com.example.bankcards.service.UserService;
 import com.example.bankcards.util.RoleType;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -53,6 +54,21 @@ public class AdminController {
             return cardService.findAll();
         } else {
             return null;
+        }
+    }
+
+
+    @PostMapping("/manage/card/delete")
+    public ResponseEntity<?> manageCardDelete(HttpServletRequest request, @RequestBody DeleteCardDto deleteCardDto) {
+        String token = jwtcore.getToken(request);
+        String email = jwtcore.getEmailFromToken(token);
+        RoleType role = userService.getRoleByEmail(email);
+        if (role == RoleType.ADMIN) {
+            ResponseEntity<?> response =  cardService.deleteCardByCardNumber(deleteCardDto.getCardNumber());
+            return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("You don't have a license", HttpStatus.FORBIDDEN);
         }
     }
 

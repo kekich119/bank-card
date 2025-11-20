@@ -72,5 +72,10 @@ public class CardService {
         return card.getOwner();
     }
 
+    public ResponseEntity<?> deleteCardByCardNumber(String cardNumber) {
+        cardRepository.deleteCardByCardNumber( cardNumber );
+        return new ResponseEntity<>("success delete", HttpStatus.OK);
+    }
+
 
 }

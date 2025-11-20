@@ -1,5 +1,6 @@
 package com.example.bankcards.controller;
 
+import com.example.bankcards.dto.SendMoneyDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.security.JWT;
@@ -34,14 +35,14 @@ public class UserController {
     }
 
     @PostMapping("/send-money")
-    public ResponseEntity<String> sendMoney(HttpServletRequest request, @RequestParam int amount, String cardNumberFrom, String cardNumberTo) {
+    public ResponseEntity<String> sendMoney(HttpServletRequest request, @RequestBody SendMoneyDto sendMoneyDto) {
         String token = jwtcore.getToken(request);
         String email = jwtcore.getEmailFromToken(token);
         User user = userService.findByEmail(email);
         String name = user.getName();
-        String owner = cardService.getOwnerByCardNumber(cardNumberFrom);
+        String owner = cardService.getOwnerByCardNumber(sendMoneyDto.getCardNumberFrom());
         if (name.equals(owner)) {
-             ResponseEntity answer = (cardService.sendMoney(cardNumberFrom, cardNumberTo, amount));
+             ResponseEntity answer = (cardService.sendMoney(sendMoneyDto.getCardNumberFrom(), sendMoneyDto.getCardNumberTo(), sendMoneyDto.getAmount()));
 
 
             return ResponseEntity.status(answer.getStatusCode()).body(answer.getBody().toString());
