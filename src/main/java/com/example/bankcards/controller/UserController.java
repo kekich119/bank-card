@@ -34,8 +34,6 @@ public class UserController {
         String token = jwtcore.getToken(request);
         String email = jwtcore.getEmailFromToken(token);
 
-
-
         List<Card> cards = userService.getUserCardsByEmail(email);
 
         if (cards.isEmpty()) {
