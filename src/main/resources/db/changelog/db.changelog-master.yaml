@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/changeset/description.yaml
+      file: db/changelog/migration/create-full-new-roles.yaml
+  - include:
+      file: db/changelog/migration/create-full-new-users.yaml
+  - include:
+      file: db/changelog/migration/create-full-new-card.yaml
