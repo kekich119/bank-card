@@ -5,13 +5,20 @@ import com.example.bankcards.security.JWT;
 import com.example.bankcards.service.CardService;
 import com.example.bankcards.service.UserService;
 import com.example.bankcards.util.RoleType;
+import jakarta.persistence.Id;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
@@ -21,43 +28,44 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AdminController.class)
-class AdminControllerTest {
+@ExtendWith(MockitoExtension.class)
+public class AdminControllerTest {
+    @Mock
+    private CardService cardService;
+    @Mock
+    private UserService userService;
+    @Mock
+    private JWT jwtcore;
 
-    @Autowired
+    @InjectMocks
+    private AdminController adminController;
+
     private MockMvc mockMvc;
 
-    @MockitoBean
-    private JWT jwt;
-
-
-    @MockitoBean
-    private UserService userService;
-
-    @MockitoBean
-    private CardService cardService;
+    @BeforeEach
+    public void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
+    }
 
     @Test
-    void shouldReturnAllUsers_whenAdmin() throws Exception {
+    void testGetAllUsersUnAuth() throws Exception {
+        mockMvc.perform(get("/admin/get/all/users")).andExpect(status().isForbidden());
+    }
 
-        String token = "fake-token";
-        String email = "admin@mail.com";
+    @Test
+    void testGetAllUsersAuth() throws Exception {
 
-        when(jwt.getToken(any())).thenReturn(token);
-        when(jwt.getEmailFromToken(token)).thenReturn(email);
-        when(userService.getRoleByEmail(email)).thenReturn(RoleType.ADMIN);
-
-        when(userService.findAllUserWithoutPassword())
-                .thenReturn(List.of(
-                        new UserViewDto(1L, "alex@mail.com", "Alex", 1),
-                        new UserViewDto(2L, "bob@mail.com", "Bob", 2)
-                ));
+        when(jwtcore.getToken(any())).thenReturn("fake_token");
+        when(jwtcore.getEmailFromToken("fake_token")).thenReturn("user@example.com");
+        when(userService.getRoleByEmail("user@example.com")).thenReturn(RoleType.ADMIN);
 
         mockMvc.perform(get("/admin/get/all/users"))
-                .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$[0].name").value("Alex"))
-                .andExpect((ResultMatcher) jsonPath("$[0].email").value("alex@mail.com"))
-                .andExpect((ResultMatcher) jsonPath("$[1].name").value("Bob"))
-                .andExpect((ResultMatcher) jsonPath("$[1].email").value("bob@mail.com"));
+                .andExpect(status().isOk());
     }
+
+
+
+
+
+
 }

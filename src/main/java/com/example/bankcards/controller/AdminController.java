@@ -31,29 +31,29 @@ public class AdminController {
 
 
     @GetMapping("/get/all/users")
-    public List<UserViewDto> getAllUsers(HttpServletRequest request) {
+    public ResponseEntity<List<UserViewDto>> getAllUsers(HttpServletRequest request) {
         String token = jwtcore.getToken(request);
         String email = jwtcore.getEmailFromToken(token);
         RoleType role = userService.getRoleByEmail(email);
 
         if (role == RoleType.ADMIN) {
-            return userService.findAllUserWithoutPassword();  //list users without password
+            return new ResponseEntity<List<UserViewDto>>(userService.findAllUserWithoutPassword(), HttpStatus.OK);  //list users without password
         } else {
-            return null;
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
 
     @GetMapping("/get/all/cards")
-    public List<Card> getAllCards(HttpServletRequest request) {
+    public ResponseEntity<List<Card>> getAllCards(HttpServletRequest request) {
         String token = jwtcore.getToken(request);
         String email = jwtcore.getEmailFromToken(token);
         RoleType role = userService.getRoleByEmail(email);
 
         if (role == RoleType.ADMIN) {
-            return cardService.findAll();
+            return new ResponseEntity<List<Card>>(cardService.findAll(), HttpStatus.OK);
         } else {
-            return null;
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
