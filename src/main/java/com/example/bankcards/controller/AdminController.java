@@ -65,7 +65,9 @@ public class AdminController {
         RoleType role = userService.getRoleByEmail(email);
         if (role == RoleType.ADMIN) {
             ResponseEntity<?> response = cardService.deleteCardByCardNumber(deleteCardDto.getCardNumber());
-            return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+            return  ResponseEntity
+                    .status(response.getStatusCode())
+                    .body(response.getBody());
         } else {
             return new ResponseEntity<>("You don't have a license", HttpStatus.FORBIDDEN);
         }
