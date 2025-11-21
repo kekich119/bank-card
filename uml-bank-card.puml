@@ -1,0 +1,242 @@
+@startuml
+enum com.example.bankcards.util.RoleType {
++  BANNED
++  USER
++  ADMIN
+- int code
++ int getCode()
++ {static} RoleType fromCode(int)
+}
+
+
+class com.example.bankcards.dto.SignUp {
+- String name
+- String email
+- String password
+}
+
+class com.example.bankcards.entity.Card {
+- long id
+- String cardNumber
+- String owner
+- String status
+- int balance
+- LocalDate dateAdd
+- LocalDate dateExpire
+}
+
+class com.example.bankcards.entity.Role {
+- long id
+- String name
+}
+
+interface com.example.bankcards.repository.CardRepository {
+~ Optional<Card> findTopByOrderByIdDesc()
+~ List<Card> findCardsByOwner(String)
+~ Card findByCardNumber(String)
+~ Card findCardByCardNumber(String)
+~ void removeCardByCardNumber(String)
+~ void deleteCardByCardNumber(String)
+}
+
+class com.example.bankcards.dto.CardResponseDto {
+- long id
+- String cardNumber
+- String owner
+- String status
+- int balance
+- LocalDate dateAdd
+- LocalDate dateExpire
+}
+
+class com.example.bankcards.security.TokenFilter {
+- JWT jwtCore
+- UserDetailsService userDetailsService
+# void doFilterInternal(HttpServletRequest,HttpServletResponse,FilterChain)
+}
+
+
+class com.example.bankcards.controller.SecurityController {
+- UserService userService
+- JWT jwtcore
+- PasswordEncoder passwordEncoder
+- AuthenticationManager authenticationManager
++ ResponseEntity<?> signUp(SignUp)
++ ResponseEntity<?> signIn(SignIn,HttpServletResponse)
+}
+
+
+class com.example.bankcards.config.SecurityConfig {
+- TokenFilter tokenFilter
+- UserService userService
++ void setTokenFilter(TokenFilter)
++ PasswordEncoder passwordEncoder()
++ AuthenticationManager authenticationManager(AuthenticationConfiguration)
++ SecurityFilterChain securityFilterChain(HttpSecurity)
++ CorsConfigurationSource corsConfigurationSource()
+}
+
+
+class com.example.bankcards.dto.SignIn {
+- String username
+- String password
+}
+
+class com.example.bankcards.entity.User {
+- long id
+- String name
+- int roleId
+- String email
+- String password
++ long getId()
++ String getName()
++ int getRoleId()
++ String getEmail()
++ String getPassword()
++ void setId(long)
++ void setName(String)
++ void setPassword(String)
++ void setEmail(String)
++ void setRoleId(int)
+}
+
+
+class com.example.bankcards.util.SchedulerCard {
+- CardService cardService
++ void scheduledCard()
+}
+
+
+class com.example.bankcards.controller.UserController {
+- UserService userService
+- CardService cardService
+- JWT jwtcore
++ List<CardResponseDto> getUserCards(HttpServletRequest)
++ List<Card> getUserCardFull(HttpServletRequest)
++ ResponseEntity<String> sendMoney(HttpServletRequest,SendMoneyDto)
+}
+
+
+class com.example.bankcards.controller.CardController {
+- CardService cardService
+- JavaMailSender mailSender
+- JWT jwtcore
+- UserService userService
++ ResponseEntity<?> createCard(HttpServletRequest)
+}
+
+
+class com.example.bankcards.dto.SendMoneyDto {
+- int amount
+- String cardNumberFrom
+- String cardNumberTo
+}
+
+class com.example.bankcards.controller.AdminController {
+- JWT jwtcore
+- UserService userService
+- CardService cardService
++ ResponseEntity<List<UserViewDto>> getAllUsers(HttpServletRequest)
++ ResponseEntity<List<Card>> getAllCards(HttpServletRequest)
++ ResponseEntity<?> manageCardDelete(HttpServletRequest,DeleteCardDto)
+}
+
+
+class com.example.bankcards.service.UserService {
+- UserRepository userRepository
+- CardRepository cardRepository
++ User addUser(User)
++ List<User> getAllUsers()
++ User findByEmail(String)
++ UserDetails loadUserByUsername(String)
++ List<UserViewDto> findAllUserWithoutPassword()
++ boolean existsByEmail(String)
++ RoleType getRoleByEmail(String)
++ List<Card> getUserCardsByEmail(String)
+}
+
+
+interface com.example.bankcards.repository.UserRepository {
+~ Optional<User> findByName(String)
+~ boolean existsByEmail(String)
+~ User findUserByEmail(String)
+~ Optional<User> findByEmail(String)
+~ List<UserViewDto> findAllUsersWithoutPassword()
+}
+
+class com.example.bankcards.config.SchedulerConfig {
+}
+class com.example.bankcards.dto.UserViewDto {
+- long id
+- String email
+- String name
+- int roleId
+}
+
+class com.example.bankcards.security.JWT {
+- String secret
+- int lifeTime
+- Key getSigningKey()
++ String generateToken(Authentication)
++ String getEmailFromToken(String)
++ String getNameFromToken(String)
++ String getToken(HttpServletRequest)
+}
+
+
+class com.example.bankcards.config.OpenApiConfig {
++ OpenAPI customOpenAPI()
+}
+
+class com.example.bankcards.util.ConstStatus {
+- String ACTIVE
+- String INACTIVE
+- String DELETED
+- String BLOCKED
+}
+
+class com.example.bankcards.service.CardService {
+- CardRepository cardRepository
++ Card save(Card)
++ List<Card> findAll()
++ String createNumberCard()
++ String incrementLast4Symbol()
++ ResponseEntity<String> sendMoney(String,String,int)
++ String getOwnerByCardNumber(String)
++ ResponseEntity<?> deleteCardByCardNumber(String)
++ String maskCardNumber(String)
+}
+
+
+class com.example.bankcards.dto.DeleteCardDto {
+~ String cardNumber
+}
+
+class com.example.bankcards.security.UserDetailsImpl {
+- long id
+- String name
+- String email
+- String password
+- int roleId
++ {static} UserDetailsImpl build(User)
++ Collection<? extends GrantedAuthority> getAuthorities()
++ String getUsername()
++ boolean isAccountNonExpired()
++ boolean isAccountNonLocked()
++ boolean isCredentialsNonExpired()
++ boolean isEnabled()
+}
+
+
+class com.example.bankcards.BankRestMainApplication {
++ {static} void main(String[])
+}
+
+
+
+org.springframework.data.jpa.repository.JpaRepository <|-- com.example.bankcards.repository.CardRepository
+org.springframework.web.filter.OncePerRequestFilter <|-- com.example.bankcards.security.TokenFilter
+org.springframework.security.core.userdetails.UserDetailsService <|.. com.example.bankcards.service.UserService
+org.springframework.data.jpa.repository.JpaRepository <|-- com.example.bankcards.repository.UserRepository
+org.springframework.security.core.userdetails.UserDetails <|.. com.example.bankcards.security.UserDetailsImpl
+@enduml
